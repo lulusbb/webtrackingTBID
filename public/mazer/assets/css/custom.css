@@ -1,0 +1,27 @@
+/* ==== Light Mode ==== */
+#sidebar {
+    background-color: #f1f3f4; /* abu terang */
+    border-right: 1px solid #ddd;
+}
+
+/* ==== Dark Mode ==== */
+html[data-bs-theme="dark"] #sidebar {
+    background-color: #1e1e2f; /* abu gelap */
+    border-right: 1px solid #333;
+}
+#sidebar {
+    box-shadow: 2px 0 8px rgba(0,0,0,0.05);
+}
+html[data-bs-theme="dark"] #sidebar {
+    box-shadow: 2px 0 8px rgba(0,0,0,0.2);
+}
+html[data-bs-theme="light"] #sidebar {
+    background-color: #f1f3f4 !important;
+    color: #212529 !important;
+}
+
+html[data-bs-theme="dark"] #sidebar {
+    background-color: #1e1e2f !important;
+    color: #ffffff !important;
+}
+

@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Tambahkan ini ke file CSS kamu */
+.bg-page {
+    background-color: #f5f6fa; /* abu muda untuk mode light */
+    min-height: 100vh;
+    padding: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+.dark .bg-page {
+    background-color: #1f1f1f; /* warna untuk mode dark */
+}
