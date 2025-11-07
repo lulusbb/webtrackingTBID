@@ -1,0 +1,53 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::create('klien_cancels', function (Blueprint $table) {
+            $table->id();
+            $table->string('nama')->nullable();
+            $table->string('lokasi_lahan')->nullable();
+            $table->string('luas_lahan')->nullable();
+            $table->string('luas_bangunan')->nullable();
+            $table->string('kebutuhan_ruang')->nullable();
+            $table->string('sertifikat')->nullable();
+            $table->string('arah_mata_angin')->nullable();
+            $table->string('batas_keliling')->nullable();
+            $table->string('foto_eksisting')->nullable();
+            $table->string('konsep_bangunan')->nullable();
+            $table->string('referensi')->nullable();
+            $table->string('budget')->nullable();
+            $table->string('share_lokasi')->nullable();
+            $table->string('biaya_survei')->nullable();
+            $table->string('hoby')->nullable();
+            $table->string('aktivitas')->nullable();
+            $table->string('prioritas_ruang')->nullable();
+            $table->string('kendaraan')->nullable();
+            $table->string('estimasi_start')->nullable();
+            $table->string('target_user_kos')->nullable();
+            $table->string('fasilitas_kos')->nullable();
+            $table->string('layout')->nullable();
+            $table->string('desain_3d')->nullable();
+            $table->string('rab_boq')->nullable();
+            $table->string('gambar_kerja')->nullable();
+            $table->string('tanggal_masuk')->nullable();
+            $table->string('email')->nullable();
+            $table->string('alamat_tinggal')->nullable();
+            $table->string('no_hp')->nullable();
+            $table->string('kode_proyek')->nullable();
+            $table->string('kelas')->nullable();
+            $table->text('keterangan')->nullable();
+            $table->timestamps();
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('klien_cancels');
+    }
+};

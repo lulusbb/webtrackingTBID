@@ -2,32 +2,80 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ProfileUpdateRequest;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules\Password;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\View\View;
 
-class ProfilController extends Controller
+class ProfileController extends Controller
 {
-    public function index()
+    /**
+     * Tampilkan halaman profil.
+     */
+    public function edit(Request $request): View
     {
-        return view('profil');
-    }
-    public function updatePassword(Request $request)
-    {
-        $request->validate([
-            'current_password' => 'required',
-            'password' => 'required|string|min:8|confirmed',
+        return view('profile.edit', [
+            'user' => $request->user(),
         ]);
+    }
 
-        if (!Hash::check($request->current_password, auth()->user()->password)) {
-            return back()->with('error', 'Password lama salah');
+    /**
+     * Update data profil (nama/email).
+     */
+    public function update(ProfileUpdateRequest $request): RedirectResponse
+    {
+        $request->user()->fill($request->validated());
+
+        if ($request->user()->isDirty('email')) {
+            $request->user()->email_verified_at = null;
         }
 
-        $user = auth()->user();
+        $request->user()->save();
+
+        return Redirect::route('profile.edit')->with('success', 'Profil diperbarui.');
+    }
+
+    /**
+     * Update password.
+     */
+    public function updatePassword(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'current_password'      => ['required', 'current_password'],
+            'password'              => ['required', 'confirmed', Password::min(8)],
+        ], [], [
+            'current_password' => 'Password saat ini',
+            'password'         => 'Password baru',
+        ]);
+
+        $user = $request->user();
         $user->password = Hash::make($request->password);
         $user->save();
 
-        // ✅ ini yang bikin alert muncul
-        return back()->with('success', 'Password berhasil diubah!');
+        return Redirect::route('profile.edit')->with('success', 'Password berhasil diperbarui.');
+    }
+
+    /**
+     * Hapus akun (opsional).
+     */
+    public function destroy(Request $request): RedirectResponse
+    {
+        $request->validateWithBag('userDeletion', [
+            'password' => ['required', 'current_password'],
+        ]);
+
+        $user = $request->user();
+
+        Auth::logout();
+        $user->delete();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return Redirect::to('/');
     }
 }

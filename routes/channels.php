@@ -13,6 +13,11 @@ use Illuminate\Support\Facades\Broadcast;
 |
 */
 
-Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
-    return (int) $user->id === (int) $id;
+// Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
+//     return (int) $user->id === (int) $id;
+// });
+
+Broadcast::channel('roles.{role}', function ($user, $role) {
+    // izinkan siapa pun yang logged-in (punya role) untuk subscribe ke channel rolenya sendiri
+    return strtolower($user->role ?? '') === strtolower($role);
 });

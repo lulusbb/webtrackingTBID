@@ -1,27 +1,1472 @@
-/* ==== Light Mode ==== */
-#sidebar {
-    background-color: #f1f3f4; /* abu terang */
-    border-right: 1px solid #ddd;
+/* =========================================================================
+   CUSTOM MAZER + TBID
+   - Sidebar (warna, hover, active, collapsed)
+   - Submenu transparan & indent
+   - Header avatar
+   - DataTables modern
+   - Row "non-Klien Baru" diredupkan
+   - Card premium + dark mode
+   ========================================================================= */
+
+/* ---------- Theme Tokens ---------- */
+:root {
+  /* Sidebar & brand */
+  --tbid-sidebar:#1e1e2d;
+  --tbid-primary:#5160e0;
+
+  /* Borders & shadows */
+  --tbid-border-light:  rgba(0,0,0,.08);
+  --tbid-border-dark:   rgba(255,255,255,.08);
+  --tbid-shadow-light:  2px 0 8px rgba(0,0,0,.05);
+  --tbid-shadow-dark:   2px 0 8px rgba(0,0,0,.2);
+
+  /* Texts */
+  --tbid-text:#ffffff;
+  --tbid-text-dim:rgba(255,255,255,.78);
+  --tbid-text-muted:#9aa3b2;
+  --tbid-text-muted-h:#b7bfcb;
+
+  /* Hovers */
+  --hover-dark:#252538;
+  --active-dark:#2a2a42;
+  --hover-light:#E9EDF7;
+
+  /* Cards & table */
+  --card-bg:#ffffff;
+  --card-border:#eef0f6;
+  --shadow-soft: 0 8px 24px rgba(16,24,40,.06);
+  --grey-50:#fafbff;
+  --grey-100:#f2f5ff;
+  --table-sticky-top: 0; /* adjust if your header is fixed */
 }
 
-/* ==== Dark Mode ==== */
-html[data-bs-theme="dark"] #sidebar {
-    background-color: #1e1e2f; /* abu gelap */
-    border-right: 1px solid #333;
-}
-#sidebar {
-    box-shadow: 2px 0 8px rgba(0,0,0,0.05);
-}
-html[data-bs-theme="dark"] #sidebar {
-    box-shadow: 2px 0 8px rgba(0,0,0,0.2);
-}
-html[data-bs-theme="light"] #sidebar {
-    background-color: #f1f3f4 !important;
-    color: #212529 !important;
+/* =========================================================================
+   SIDEBAR BASE
+   ========================================================================= */
+#sidebar, .sidebar, .sidebar-wrapper{
+  background: var(--tbid-sidebar) !important;
+  color: var(--tbid-text) !important;
+  box-shadow: var(--tbid-shadow-dark);
+  border-right: 1px solid #333;
+  overflow: auto;
 }
 
-html[data-bs-theme="dark"] #sidebar {
-    background-color: #1e1e2f !important;
-    color: #ffffff !important;
+/* Section title / menu-title */
+.sidebar-wrapper .menu-title,
+.sidebar-wrapper .menu .sidebar-title{
+  color: var(--tbid-text) !important;
+  opacity: .95 !important;
 }
 
+/* Link & icon default = putih */
+.sidebar-wrapper .menu .sidebar-item .sidebar-link,
+.sidebar-wrapper .menu .sidebar-item > a,
+.sidebar-wrapper .menu .submenu .submenu-item > a,
+.sidebar-wrapper .menu .submenu .submenu-link{
+  color: var(--tbid-text) !important;
+  border-radius: .55rem;
+}
+.sidebar-wrapper .menu .sidebar-item i,
+.sidebar-wrapper .menu .sidebar-item svg{
+  color: var(--tbid-text) !important;
+  stroke: var(--tbid-text) !important;
+}
+
+/* Hover: teks & ikon HITAM (kecuali item aktif) */
+.sidebar-wrapper .menu .sidebar-item:not(.active) > .sidebar-link:hover,
+.sidebar-wrapper .menu .sidebar-item:not(.active) .sidebar-link:hover{
+  background: var(--hover-light) !important;
+  color: #000 !important;
+}
+.sidebar-wrapper .menu .sidebar-item:not(.active) > .sidebar-link:hover i,
+.sidebar-wrapper .menu .sidebar-item:not(.active) > .sidebar-link:hover svg{
+  color:#000 !important; stroke:#000 !important;
+}
+
+/* Parent aktif: biru rata + teks/icon putih */
+.sidebar-wrapper .menu .sidebar-item.active > .sidebar-link{
+  background: var(--tbid-primary) !important;
+  color:#fff !important;
+  box-shadow:none !important;
+}
+
+/* Submenu panel: transparan (tanpa bubble) */
+.sidebar-wrapper .menu .submenu{
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  padding: .25rem 0 .5rem 0 !important;
+}
+
+/* Submenu link: indent rapi, default putih, hover jadi hitam */
+.sidebar-wrapper .menu .submenu .submenu-item > a,
+.sidebar-wrapper .menu .submenu .submenu-link{
+  background: transparent !important;
+  color: #fff !important;
+  padding: .45rem 1rem .45rem 2.5rem;
+}
+.sidebar-wrapper .menu .submenu .submenu-item > a:hover,
+.sidebar-wrapper .menu .submenu .submenu-link:hover{
+  background: var(--hover-light) !important;
+  color:#000 !important;
+}
+.sidebar-wrapper .menu .submenu .submenu-item.active > a,
+.sidebar-wrapper .menu .submenu .active > .submenu-link{
+  background: var(--active-dark) !important;
+  color:#fff !important;
+}
+
+/* Caret pada item bersubmenu */
+.sidebar-item.has-sub > .sidebar-link::after{
+  border-color:#fff !important; color:#fff !important;
+}
+.sidebar-item.has-sub:not(.active) > .sidebar-link:hover::after{
+  border-color:#000 !important; color:#000 !important;
+}
+
+/* Align icon & text */
+.sidebar-link{ padding: 8px 12px; }
+.sidebar-link i{
+  font-size: 1.1rem;
+  line-height: 1;
+  display: inline-flex; align-items: center;
+}
+.sidebar-link .sidebar-text, .sidebar-text{
+  font-size: .95rem; line-height: 1;
+  display: inline-flex; align-items: center;
+}
+
+/* =========================================================================
+   SIDEBAR COLLAPSED
+   ========================================================================= */
+.sidebar-collapsed #sidebar{ width: 72px !important; overflow: visible; }
+.sidebar-collapsed #sidebar .sidebar-wrapper .menu .sidebar-item .sidebar-link span,
+.sidebar-collapsed #sidebar .sidebar-text{ display:none; }
+.sidebar-collapsed .sidebar-link{ justify-content:center; }
+.sidebar-collapsed #sidebar .logo img{ height:32px; }
+
+/* Expand/collapse animation for submenu (JS toggles .active) */
+#sidebar .sidebar-item.has-sub > .submenu{
+  display:block; overflow:hidden; max-height:0; transition:max-height .25s ease;
+}
+#sidebar .sidebar-item.has-sub.active > .submenu{ max-height:800px; }
+
+/* =========================================================================
+   HEADER: AVATAR
+   ========================================================================= */
+.header-user{ display:flex; align-items:center; gap:.5rem; }
+.header-user .avatar{
+  width:36px; height:36px; border-radius:50%; object-fit:cover;
+  border:2px solid rgba(255,255,255,0.08);
+}
+
+/* =========================================================================
+   SWEETALERT TWEAKS
+   ========================================================================= */
+.swal2-custom-popup{ border-radius:.75rem; }
+.swal2-penjadwalan .swal2-html-container{ text-align:left; margin:0; padding:.25rem 0; max-height:60vh; overflow-y:auto; }
+.swal2-penjadwalan .form-row{ display:grid; grid-template-columns:1fr; gap:.5rem; }
+.swal2-penjadwalan label{ font-size:.875rem; color:#9aa0a6; margin-top:.25rem; }
+.swal2-penjadwalan .swal2-input.custom{ width:100%; margin:.25rem 0 1rem 0; }
+@media (max-width:576px){ .swal2-penjadwalan.swal2-popup{ width:95vw !important; } }
+
+/* =========================================================================
+   LOADING OVERLAY
+   ========================================================================= */
+#loading-overlay{ display:none; }
+#loading-overlay .spinner-border{ width:3rem; height:3rem; }
+
+/* =========================================================================
+   DATATABLES: MODERN
+   ========================================================================= */
+.table-responsive{ margin-bottom:.25rem; }
+
+/* Sticky header + zebra + hover */
+.table thead th{ position:sticky; top:var(--table-sticky-top); background:#fff; z-index:5; }
+.table tbody tr:nth-child(even){ background:var(--grey-50); }
+.table td, .table th{ vertical-align:middle; }
+
+/* Sticky actions column */
+.table .col-actions{ position:sticky; right:0; background:#fff; z-index:6; }
+
+/* Pagination: tanpa border, gaya primary */
+.dataTables_wrapper .dataTables_paginate .paginate_button,
+.dataTables_wrapper .dataTables_paginate .paginate_button:focus,
+.dataTables_wrapper .dataTables_paginate .paginate_button:active{
+  border:0 !important; box-shadow:none !important; outline:none !important;
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button{
+  display:inline-block; background:transparent !important; color:var(--tbid-primary) !important;
+  border-radius:.6rem !important; padding:.35rem .65rem !important; margin:0 .15rem !important;
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover{
+  background:var(--tbid-primary) !important; color:#fff !important;
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button.current{
+  background:var(--tbid-primary) !important; color:#fff !important;
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button.disabled,
+.dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover{
+  background:transparent !important; color:#6c748a !important; cursor:default !important;
+}
+.dataTables_wrapper .dataTables_paginate{ padding-top:.75rem; }
+
+/* Length & info */
+div.dataTables_wrapper div.dataTables_info{ padding-top:.35rem; margin-top:.15rem; margin-bottom:0; }
+div.dataTables_wrapper div.dataTables_paginate{ margin:0; padding-top:.15rem; }
+div.dataTables_wrapper div.dataTables_length label{ margin-bottom:.15rem; }
+div.dataTables_wrapper div.dataTables_length select{ padding:.2rem .5rem; height:32px; line-height:32px; }
+
+/* Ghost actions */
+.btn-ghost{ background:transparent; border:1px solid rgba(0,0,0,.08); }
+.btn-ghost:hover{ background:#f5f7ff; }
+
+/* Density */
+.table-compact tbody td{ padding:.45rem .75rem; }
+.table-comfortable tbody td{ padding:.9rem .75rem; }
+
+/* Micro-interactions */
+.btn, .badge, .sidebar-link, .submenu-link, .paginate_button{
+  transition: background .2s ease, color .2s ease, box-shadow .2s ease, transform .1s ease;
+}
+
+/* Empty state */
+.empty-state img{ opacity:.9; }
+.empty-state h6{ font-weight:700; }
+
+/* =========================================================================
+   REDUPKAN BARIS NON "KLIEN BARU"
+   ========================================================================= */
+table.dataTable tbody tr.row-muted td{ color: var(--tbid-text-muted) !important; }
+table.dataTable tbody tr.row-muted .badge,
+table.dataTable tbody tr.row-muted .btn{ opacity:.7; filter:grayscale(20%); }
+/* KECUALI tombol Lihat */
+table.dataTable tbody tr.row-muted .btn.btn-success{ opacity:1; filter:none; pointer-events:auto; }
+/* Nonaktifkan interaksi selain "Lihat" */
+table.dataTable tbody tr.row-muted .btn:not(.btn-success),
+table.dataTable tbody tr.row-muted a:not(.btn-success){ pointer-events:none; }
+/* Hover sedikit lebih kontras */
+table.dataTable tbody tr.row-muted:hover td{ color: var(--tbid-text-muted-h) !important; }
+table.dataTable tbody tr.row-muted:hover .badge,
+table.dataTable tbody tr.row-muted:hover .btn:not(.btn-success){ opacity:.85; filter:grayscale(10%); }
+
+/* Status cancel badge */
+.badge-cancel{ background-color:#6c757d !important; color:#ddd !important; opacity:.7; filter:grayscale(20%); }
+.badge-cancel:hover{ opacity:.85; filter:grayscale(10%); }
+
+/* =========================================================================
+   CARD PREMIUM
+   ========================================================================= */
+.card{ border:0; border-radius:1rem; background:var(--card-bg); box-shadow:var(--shadow-soft); }
+.card-header{ background:#fff; border-bottom:1px solid var(--card-border); border-top-left-radius:1rem; border-top-right-radius:1rem; }
+.card-body{ padding:1rem 1rem 1.25rem 1rem; }
+h5.card-title{ font-weight:700; }
+
+/* Toolbar kecil */
+.input-with-icon{ position:relative; }
+.input-with-icon i{ position:absolute; left:.75rem; top:50%; transform:translateY(-50%); opacity:.6; }
+.input-with-icon input{ padding-left:2rem; }
+.filter-chip{ display:inline-flex; align-items:center; gap:.35rem; background:#eef2ff; border:1px solid #dbe2ff; color:#3f51b5; border-radius:999px; padding:.25rem .6rem; font-size:.8rem; margin-right:.35rem; }
+
+/* === Page background LIGHT → #dfe4eb === */
+html[data-bs-theme="light"],
+html[data-bs-theme="light"] body{ background-color:#dfe4eb !important; }
+html[data-bs-theme="light"] #main,
+html[data-bs-theme="light"] main#main-content,
+html[data-bs-theme="light"] .page-heading,
+html[data-bs-theme="light"] .content,
+html[data-bs-theme="light"] .page-content{ background:#e1e1e1 !important; }
+html[data-bs-theme="light"] .card,
+html[data-bs-theme="light"] .card-header{ background:#ffffff !important; }
+
+/* ===== TABLE: clean (no grid) ===== */
+.table-clean{ border-collapse:separate; border-spacing:0; background:#fff; }
+.table-clean thead th{
+  background:#fff!important; border:0!important; border-bottom:1px solid #E6E9F0!important; font-weight:600;
+}
+.table-clean tbody td{
+  background:#fff!important; border:0!important; border-bottom:1px solid #EDEFF5!important;
+}
+/* hilangkan zebra & hover */
+.table-clean tbody tr:nth-child(even),
+.table-clean tbody tr:nth-child(odd),
+.table-clean tbody tr:hover{ background:#fff!important; }
+.table-hover.table-clean>tbody>tr:hover>*{ --bs-table-accent-bg:transparent!important; background:transparent!important; }
+/* sudut membulat */
+.table-clean thead tr:first-child th:first-child{ border-top-left-radius:.6rem; }
+.table-clean thead tr:first-child th:last-child{  border-top-right-radius:.6rem; }
+.table-clean tbody tr:last-child td:first-child{  border-bottom-left-radius:.6rem; }
+.table-clean tbody tr:last-child td:last-child{   border-bottom-right-radius:.6rem; }
+/* sticky col aksi menyatu */
+.table-clean .col-actions{ background:#fff!important; }
+/* netralisir table-bordered */
+.table-clean.table-bordered>:not(caption)>*{ border-width:0!important; }
+
+/* ===== DARK MODE — clean ===== */
+html[data-bs-theme="dark"] .table-clean{ background:#0F1220; }
+html[data-bs-theme="dark"] .table-clean thead th{
+  background:#11131a!important; color:#e2e6f3!important; border-bottom:1px solid #2a2f44!important;
+}
+html[data-bs-theme="dark"] .table-clean tbody td{
+  background:#0F1220!important; color:#cfd3e0!important; border-bottom:1px solid #1a1f31!important;
+}
+html[data-bs-theme="dark"] .table-clean .col-actions{ background:#0F1220!important; }
+html[data-bs-theme="dark"] .table-clean tbody tr:hover td{ background:#151a2e!important; }
+html[data-bs-theme="dark"] table.dataTable.no-footer{ border-bottom:0!important; }
+html[data-bs-theme="dark"] div.dataTables_wrapper div.dataTables_scrollHead{ border-bottom:1px solid #2a2f44!important; }
+html[data-bs-theme="dark"] div.dataTables_wrapper div.dataTables_scrollBody{ border-bottom:0!important; }
+html[data-bs-theme="dark"] .dataTables_wrapper .dataTables_filter input,
+html[data-bs-theme="dark"] .dataTables_wrapper .dataTables_length select{
+  background:#141728!important; color:#e6e9f6!important; border:1px solid #262B3E!important; border-radius:.6rem!important; box-shadow:none!important;
+}
+html[data-bs-theme="dark"] .dataTables_wrapper .dataTables_filter input::placeholder{ color:#7681a0!important; }
+html[data-bs-theme="dark"] .dataTables_wrapper .dataTables_filter input:focus,
+html[data-bs-theme="dark"] .dataTables_wrapper .dataTables_length select:focus{
+  outline:none!important; border-color:#5160e0!important; box-shadow:0 0 0 .2rem rgba(81,96,224,.15)!important;
+}
+html[data-bs-theme="dark"] .dataTables_wrapper .dataTables_paginate .page-link{ color:#9aa6d1!important; }
+
+/* ===== Mobile off-canvas sidebar (≤ xl) — FIX kosong ===== */
+@media (max-width: 1199.98px){
+  /* Panel geser dari kiri */
+  #sidebar{
+    position: fixed;
+    top:0; bottom:0; left:0; right:auto;
+    width: 260px; max-width: 85vw;
+    transform: translateX(-100%);          /* tertutup default */
+    transition: transform .25s ease;
+    z-index: 1035;
+    background: var(--tbid-sidebar);       /* pastikan warna ada */
+    will-change: transform;
+  }
+  /* Pastikan konten sidebar tampil & scroll */
+  #sidebar .sidebar-wrapper{
+    display:block!important; visibility:visible!important; opacity:1!important;
+    height:100%; overflow-y:auto; -webkit-overflow-scrolling:touch;
+    position:relative; z-index:1;
+  }
+  /* Buka jika body.sidebar-open ATAU #sidebar.active (kompat Mazer) */
+  body.sidebar-open #sidebar,
+  #sidebar.active{ transform: translateX(0); }
+
+  /* Konten utama full */
+  #main{ margin-left:0!important; }
+
+  /* Backdrop sinkron */
+  #sidebar-backdrop{
+    position:fixed; inset:0; background:rgba(0,0,0,.45);
+    display:none; z-index:1030;
+  }
+  body.sidebar-open #sidebar-backdrop,
+  #sidebar.active ~ #sidebar-backdrop{ display:block; }
+}
+/* ===== FIX: Off-canvas sidebar (mobile ≤ xl) ===== */
+@media (max-width:1199.98px){
+  #sidebar{ position:fixed; top:0; left:0; bottom:0; width:260px; max-width:85vw;
+            background:var(--tbid-sidebar)!important; transform:translateX(-100%);
+            transition:transform .25s ease; z-index:1040; }
+  #sidebar .sidebar-wrapper{ height:100%; overflow:auto; opacity:1; visibility:visible; }
+  body.sidebar-open #sidebar, #sidebar.active{ transform:translateX(0); }
+
+  #sidebar-backdrop{ position:fixed; inset:0; background:rgba(0,0,0,.45);
+                     display:none; z-index:1035; }
+  body.sidebar-open #sidebar-backdrop{ display:block; }
+
+  #main{ margin-left:0!important; }
+}
+@media (min-width:1200px){
+  #sidebar{ position:sticky; transform:none!important; z-index:auto; }
+  #sidebar-backdrop{ display:none!important; }
+}
+
+
+/* Desktop reset: jangan ada transform/backdrop */
+@media (min-width: 1200px){
+  #sidebar{ position: sticky; transform: none !important; z-index: auto; }
+  #sidebar-backdrop{ display: none !important; }
+}
+
+@media (max-width:1199.98px){
+  #sidebar{ position:fixed; top:0; left:0; bottom:0; width:260px; max-width:85vw;
+            background:var(--tbid-sidebar)!important; transform:translateX(-100%);
+            transition:transform .25s ease; z-index:1040; }
+  #sidebar .sidebar-wrapper{ height:100%; overflow:auto; opacity:1; visibility:visible; }
+  body.sidebar-open #sidebar, #sidebar.active{ transform:translateX(0); }
+
+  #sidebar-backdrop{ position:fixed; inset:0; background:rgba(0,0,0,.45);
+                     display:none; z-index:1035; }
+  body.sidebar-open #sidebar-backdrop{ display:block; }
+
+  #main{ margin-left:0!important; }
+}
+@media (min-width:1200px){
+  #sidebar{ position:sticky; transform:none!important; z-index:auto; }
+  #sidebar-backdrop{ display:none!important; }
+}
+/* ====== Clean & Minimal Tables (global) ====== */
+
+/* Token warna tabel (light / dark) */
+html[data-bs-theme="light"]{
+  --tbl-bg:        #ffffff;
+  --tbl-head-bg:   #ffffff;
+  --tbl-sep:       #EDEFF5;  /* pemisah baris */
+  --tbl-sep-head:  #E6E9F0;  /* pemisah header */
+  --tbl-hover-bg:  #F5F7FD;  /* hover sangat halus */
+}
+
+html[data-bs-theme="dark"]{
+  --tbl-bg:        #0F1220;
+  --tbl-head-bg:   #11131a;
+  --tbl-sep:       #1E2233;
+  --tbl-sep-head:  #262A3A;
+  --tbl-hover-bg:  #131627;
+}
+
+/* ===== Basis: hilangkan grid, pakai separator bawah tipis ===== */
+.table:not(.table-classic),
+table.dataTable:not(.table-classic){
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+  background: var(--tbl-bg) !important;
+}
+
+/* Header: tanpa border samping; hanya garis bawah tipis */
+.table:not(.table-classic) thead th,
+table.dataTable:not(.table-classic) thead th{
+  background: var(--tbl-head-bg) !important;
+  border: 0 !important;
+  border-bottom: 1px solid var(--tbl-sep-head) !important;
+  font-weight: 600;
+}
+
+/* Body: tanpa garis vertikal; hanya separator bawah */
+.table:not(.table-classic) tbody td,
+table.dataTable:not(.table-classic) tbody td{
+  background: var(--tbl-bg) !important;
+  border: 0 !important;
+  border-bottom: 1px solid var(--tbl-sep) !important;
+}
+
+/* Hilangkan zebra bawaan; hover halus */
+.table:not(.table-classic) tbody tr:nth-child(even),
+.table:not(.table-classic) tbody tr:nth-child(odd){
+  background: var(--tbl-bg) !important;
+}
+
+.table-hover:not(.table-classic) > tbody > tr:hover > *{
+  background: var(--tbl-hover-bg) !important;
+}
+
+/* Sudut membulat agar berasa “card-like” */
+.table:not(.table-classic) thead tr:first-child th:first-child{ border-top-left-radius: .6rem; }
+.table:not(.table-classic) thead tr:first-child th:last-child{  border-top-right-radius: .6rem; }
+.table:not(.table-classic) tbody tr:last-child td:first-child{  border-bottom-left-radius: .6rem; }
+.table:not(.table-classic) tbody tr:last-child td:last-child{   border-bottom-right-radius: .6rem; }
+
+/* Kolom aksi sticky tetap menyatu dengan latar baris */
+.table .col-actions{ background: var(--tbl-bg) !important; }
+
+/* Netralisir DataTables ketika pakai scroll head/body */
+table.dataTable.no-footer{ border-bottom: 0 !important; }
+div.dataTables_wrapper div.dataTables_scrollHead{
+  border-bottom: 1px solid var(--tbl-sep-head) !important;
+}
+div.dataTables_wrapper div.dataTables_scrollBody{
+  border-bottom: 0 !important;
+}
+div.dataTables_wrapper div.dataTables_scrollHead thead th{
+  background: var(--tbl-head-bg) !important;
+  border: 0 !important;
+  border-bottom: 1px solid var(--tbl-sep-head) !important;
+}
+div.dataTables_wrapper div.dataTables_scrollBody tbody td{
+  background: var(--tbl-bg) !important;
+  border: 0 !important;
+  border-bottom: 1px solid var(--tbl-sep) !important;
+}
+
+/* (Opsional) rapikan kontrol datatables */
+.dataTables_wrapper .dataTables_info{ padding-top:.35rem; margin-top:.15rem; }
+.dataTables_wrapper .dataTables_length label{ margin-bottom:.15rem; }
+.dataTables_wrapper .dataTables_length select{
+  padding:.2rem .5rem; height:32px; line-height:32px;
+}
+
+/* ===== Opt-out: pakai tampilan lama untuk tabel tertentu =====
+   Tambahkan class 'table-classic' pada <table> yang ingin DIKECUALIKAN */
+.table.table-classic thead th,
+.table.table-classic tbody td{ border: 1px solid var(--bs-border-color) !important; }
+/* === Aksi column — normalizer (semua tabel) === */
+/* kasih kelas ke kolom aksi: .col-actions (lihat bagian JS di bawah) */
+.table .col-actions{
+  min-width: 120px;                /* supaya tidak wrap */
+  white-space: nowrap;
+}
+
+/* group tombol di kolom aksi */
+.table .col-actions .tbid-aksi{
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;                     /* jarak antar tombol */
+}
+
+/* tombol ikon kotak seragam */
+.table .col-actions .btn,
+.table .btn-icon{
+  width: 32px;
+  height: 32px;
+  padding: 0 !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: .55rem;           /* biar selaras dengan style card */
+  line-height: 1 !important;       /* buang efek line-height Bootstrap */
+}
+
+/* ikon di dalam tombol */
+.table .col-actions .btn i,
+.table .col-actions .btn svg,
+.table .btn-icon i,
+.table .btn-icon svg{
+  font-size: 1rem;
+  pointer-events: none;
+}
+
+/* bila butuh versi kecil (opsional) */
+.table .col-actions .btn-xs{
+  width: 28px; height: 28px;
+}
+
+/* sel tabel tetap tengah & rapih */
+.table td, .table th{ vertical-align: middle; }
+
+/* cegah tombol memanjang karena font-size parent */
+.table .col-actions{ font-size: 0; }
+.table .col-actions .btn{ font-size: 1rem; }
+
+/* ===== Override Dark Mode (Mazer) ===== */
+/* Cover semua kemungkinan selector dark milik Mazer / Bootstrap */
+html.theme-dark, body.theme-dark, [data-bs-theme="dark"]{
+  /* Palet kita */
+  --bg-1: #1e1e2d;          /* body/bg utama */
+  --bg-2: #24243a;          /* card/panel */
+  --bg-3: #1b1b2a;          /* input */
+  --txt : #e5e7eb;          /* teks utama */
+  --muted: #9ca3af;         /* teks sekunder */
+  --line: rgba(255,255,255,.08); /* border halus */
+
+  /* Bootstrap tokens (banyak komponen Mazer pakai ini) */
+  --bs-body-bg: var(--bg-1);
+  --bs-body-color: var(--txt);
+  --bs-card-bg: var(--bg-2);
+  --bs-secondary-bg: var(--bg-2);
+  --bs-tertiary-bg: var(--bg-3);
+  --bs-border-color: var(--line);
+  --bs-dropdown-bg: var(--bg-2);
+  --bs-list-group-bg: var(--bg-2);
+}
+
+/* Permukaan utama */
+html.theme-dark body,
+[data-bs-theme="dark"] body,
+html.theme-dark .page-content,
+[data-bs-theme="dark"] .page-content,
+html.theme-dark .section,
+[data-bs-theme="dark"] .section{
+  background: #14141e !important;
+  color: var(--txt) !important;
+}
+
+/* Sidebar/Topbar (nama class Mazer umumnya begini) */
+html.theme-dark .sidebar, [data-bs-theme="dark"] .sidebar,
+html.theme-dark .sidebar-wrapper, [data-bs-theme="dark"] .sidebar-wrapper,
+html.theme-dark .navbar, [data-bs-theme="dark"] .navbar,
+html.theme-dark header.navbar, [data-bs-theme="dark"] header.navbar{
+  background: var(--bg-1) !important;
+  color: var(--txt) !important;
+  border-color: var(--line) !important;
+}
+
+/* Card / panel / list / dropdown / modal */
+html.theme-dark .card, [data-bs-theme="dark"] .card,
+html.theme-dark .dropdown-menu, [data-bs-theme="dark"] .dropdown-menu,
+html.theme-dark .modal-content, [data-bs-theme="dark"] .modal-content{
+  background: var(--bg-2) !important;
+  color: var(--txt) !important;
+  border: 1px solid var(--line) !important;
+}
+html.theme-dark .list-group-item, [data-bs-theme="dark"] .list-group-item{
+  background: var(--bg-2) !important;
+  color: var(--txt) !important;
+  border-color: var(--line) !important;
+}
+
+/* Form */
+html.theme-dark .form-control, [data-bs-theme="dark"] .form-control,
+html.theme-dark .form-select,  [data-bs-theme="dark"] .form-select{
+  background: var(--bg-3) !important;
+  color: var(--txt) !important;
+  border-color: var(--line) !important;
+}
+html.theme-dark .form-control::placeholder,
+[data-bs-theme="dark"] .form-control::placeholder{ color: var(--muted); }
+
+/* Buttons outline agar kontras */
+html.theme-dark .btn-outline-secondary,
+[data-bs-theme="dark"] .btn-outline-secondary{
+  color: var(--txt) !important;
+  border-color: var(--line) !important;
+}
+html.theme-dark .btn-outline-secondary:hover,
+[data-bs-theme="dark"] .btn-outline-secondary:hover{
+  background: #2a2a43 !important;
+  border-color: #2a2a43 !important;
+}
+
+/* Table & garis */
+html.theme-dark .table, [data-bs-theme="dark"] .table{ color: var(--txt); }
+html.theme-dark .table td, html.theme-dark .table th,
+[data-bs-theme="dark"] .table td, [data-bs-theme="dark"] .table th{
+  border-color: var(--line) !important;
+}
+html.theme-dark hr, [data-bs-theme="dark"] hr,
+html.theme-dark .border, [data-bs-theme="dark"] .border{
+  border-color: var(--line) !important;
+}
+
+/* Titik legend kecil (punya kamu) */
+.legend-dot{width:12px;height:12px;border-radius:50%;display:inline-block}
+
+/* ========== Global Dark Overrides (Mazer) ========== */
+:root[data-bs-theme="dark"],
+html.theme-dark{
+  /* warna dasar dashboard */
+  --tbid-card-bg: #1e1e2d;
+  --tbid-card-border: #2a2a3f;
+
+  /* paksa variabel bootstrap/mazer utk header & body card */
+  --bs-card-bg: var(--tbid-card-bg) !important;
+  --bs-card-cap-bg: var(--tbid-card-bg) !important;   /* << header card */
+  --bs-card-border-color: var(--tbid-card-border) !important;
+}
+
+/* Seluruh card ikut warna di atas */
+[data-bs-theme="dark"] .card,
+html.theme-dark .card{
+  background-color: var(--tbid-card-bg) !important;
+  border-color: var(--tbid-card-border) !important;
+}
+
+/* Header card (bar “Klien Baru”, dll) */
+[data-bs-theme="dark"] .card-header,
+html.theme-dark .card-header{
+  background-color: var(--tbid-card-bg) !important;
+  border-bottom: 1px solid var(--tbid-card-border) !important;
+}
+
+/* Kalau ada class tambahan dari theme (bg-dark, bg-secondary, dsb),
+   tetap dipaksa pakai warna kita */
+[data-bs-theme="dark"] .card-header[class*="bg-"],
+html.theme-dark .card-header[class*="bg-"]{
+  background-color: var(--tbid-card-bg) !important;
+}
+
+/* Table head di dalam card supaya tidak lebih gelap dari body */
+[data-bs-theme="dark"] .table thead th,
+html.theme-dark .table thead th{
+  background-color: #24243b !important;  /* sedikit beda utk kontras */
+  border-color: var(--tbid-card-border) !important;
+  color: #cbd5e1 !important;
+}
+
+/* DataTables wrapper (hapus “pita” gelap head scroll) */
+[data-bs-theme="dark"] .dataTables_wrapper .dataTables_scrollHead,
+[data-bs-theme="dark"] .dataTables_wrapper .row,
+html.theme-dark .dataTables_wrapper .dataTables_scrollHead,
+html.theme-dark .dataTables_wrapper .row{
+  background: transparent !important;
+}
+
+/* Elemen kontrol DataTables */
+[data-bs-theme="dark"] .dataTables_wrapper .dataTables_filter input,
+[data-bs-theme="dark"] .dataTables_wrapper .dataTables_length select,
+html.theme-dark .dataTables_wrapper .dataTables_filter input,
+html.theme-dark .dataTables_wrapper .dataTables_length select{
+  background:#1f1f2e;
+  border:1px solid var(--tbid-card-border);
+  color:#e5e7eb;
+}
+[data-bs-theme="dark"] .dataTables_wrapper .dataTables_paginate .paginate_button,
+html.theme-dark .dataTables_wrapper .dataTables_paginate .paginate_button{
+  background:#26263d;border:1px solid var(--tbid-card-border);color:#cbd5e1 !important;
+}
+[data-bs-theme="dark"] .dataTables_wrapper .dataTables_paginate .paginate_button.current,
+[data-bs-theme="dark"] .dataTables_wrapper .dataTables_paginate .paginate_button:hover,
+html.theme-dark .dataTables_wrapper .dataTables_paginate .paginate_button.current,
+html.theme-dark .dataTables_wrapper .dataTables_paginate .paginate_button:hover{
+  background:#3a3a5c !important;color:#fff !important;
+}
+/* ====== Traffic by Step (List Group) – Dark theme ====== */
+:root[data-bs-theme="dark"],
+html.theme-dark{
+  --tbid-surface-1: #1e1e2d;   /* warna card body kita */
+  --tbid-surface-2: #24243b;   /* sedikit kontras utk hover/thead */
+  --tbid-border:    #2a2a3f;   /* garis pemisah */
+  --tbid-text:      #e5e7eb;   /* teks utama */
+}
+
+/* Variabel list-group Bootstrap diarahkan ke palet kita */
+[data-bs-theme="dark"] .list-group,
+html.theme-dark .list-group{
+  --bs-list-group-bg: var(--tbid-surface-1);
+  --bs-list-group-color: var(--tbid-text);
+  --bs-list-group-border-color: var(--tbid-border);
+  --bs-list-group-action-hover-bg: var(--tbid-surface-2);
+  --bs-list-group-action-active-bg: var(--tbid-surface-2);
+}
+
+/* Item list-group (termasuk yang flush) */
+[data-bs-theme="dark"] .list-group-item,
+html.theme-dark .list-group-item{
+  background-color: var(--tbid-surface-1) !important;
+  border-color: var(--tbid-border) !important;
+  color: var(--tbid-text) !important;
+}
+
+/* Hover/aktif lebih terang sedikit agar ada depth */
+[data-bs-theme="dark"] .list-group-item:hover,
+[data-bs-theme="dark"] .list-group-item-action:hover,
+html.theme-dark .list-group-item:hover,
+html.theme-dark .list-group-item-action:hover{
+  background-color: var(--tbid-surface-2) !important;
+}
+
+/* List-group-flush tetap ada garis pemisah rapi */
+.list-group-flush>.list-group-item{
+  border-width: 0 0 1px !important;
+}
+.list-group-flush>.list-group-item:last-child{
+  border-bottom-width: 0 !important;
+}
+
+/* Badge “bg-primary-subtle” biar kontras tapi soft */
+[data-bs-theme="dark"] .badge.bg-primary-subtle,
+html.theme-dark .badge.bg-primary-subtle{
+  background-color: #1f2a44 !important;  /* navy lembut */
+  color: #a9c7ff !important;             /* teks kebiruan */
+  border: 1px solid #27457a !important;  /* garis tipis */
+  padding: .15rem .35rem;                /* lebih rapat */
+}
+  .legend-dot{width:12px;height:12px;border-radius:50%;display:inline-block}
+
+  /* KPI Proyek Berjalan berwarna #5160e0 */
+  .kpi-proyek .card-body{
+    background:#5160e0 !important;
+    color:#fff !important;
+    border-radius:.75rem; /* biar lembut */
+  }
+  .kpi-proyek .card-body .text-muted{
+    color:rgba(255,255,255,.9) !important; /* judul kecilnya */
+  }
+  .kpi-proyek .display-6{
+    color:#fff !important; /* angka besar */
+  }
+    .legend-dot{width:12px;height:12px;border-radius:50%;display:inline-block}
+
+  /* KPI putih (selalu #fff walau dark mode) */
+  .kpi-white .card-body{
+    background:#ffffff !important;
+    color:#111827 !important;           /* abu tua utk teks utama */
+    border-radius:.75rem;
+  }
+  .kpi-white .card-body .text-muted{
+    color:#6B7280 !important;           /* label kecil */
+  }
+  .kpi-white .display-6{
+    color:#111827 !important;           /* angka besar */
+  }
+
+  /* KPI Proyek Berjalan berwarna #5160e0 (sudah ada sebelumnya) */
+  .kpi-proyek .card-body{
+    background:#5160e0 !important;
+    color:#fff !important;
+    border-radius:.75rem;
+  }
+  .kpi-proyek .card-body .text-muted{ color:rgba(255,255,255,.9) !important; }
+  .kpi-proyek .display-6{ color:#fff !important; }
+
+  /* ====== Samakan background sel teks dengan panel (halaman SHOW) ====== */
+html[data-bs-theme="dark"] .theme-show{
+  --show-card-bg:   #1e1e2d;
+  --show-card-soft: #23253a;
+  --show-border:    #2b3050;
+  --show-text:      #E6E9F2;
+}
+
+/* Semua sel table (th/td) & header di dalam card */
+.theme-show .card .table,
+.theme-show .card .table > :not(caption) > * > *{
+  background-color: var(--show-card-soft) !important;
+  color: var(--show-text);
+  box-shadow: none !important;
+  border-color: var(--show-border) !important;
+}
+
+/* Matikan zebra striping agar tidak beda-beda */
+.theme-show .card .table.table-striped > tbody > tr:nth-of-type(odd) > *{
+  --bs-table-accent-bg: transparent;
+  background-color: var(--show-card-soft) !important;
+}
+
+/* Warna saat hover dibuat sedikit lebih terang, masih selaras */
+.theme-show .card .table.table-hover > tbody > tr:hover > *{
+  background-color: #2a2d45 !important;
+}
+
+/* List group (kalau ada) disamakan juga */
+.theme-show .card .list-group-item{
+  background-color: var(--show-card-soft) !important;
+  border-color: var(--show-border) !important;
+  color: var(--show-text);
+}
+
+/* Kalau ada elemen yang diberi .bg-dark/.bg-light di dalam card show,
+   samakan supaya tidak belang */
+.theme-show .card .bg-dark,
+.theme-show .card .bg-light{
+  background-color: var(--show-card-soft) !important;
+  color: var(--show-text) !important;
+}
+
+/* Kotak baris key–value custom dari sebelumnya */
+.theme-show .show-box{ background: var(--show-card-soft); border-color: var(--show-border); }
+.theme-show .show-item{ border-bottom-color: var(--show-border); }
+.theme-show .show-label{ color: #AEB6C7; }
+.theme-show .show-value{ color: var(--show-text); }
+
+/* === THEME: Show pages (detail view) =============================== */
+/* =========================================================
+   THEME: Show (Detail) — Borderless & No-Hover
+   ========================================================= */
+
+/* palet (biarkan seperti yang kamu pakai) */
+.theme-show{
+  --show-bg:       #1e1e2d;   /* warna sel */
+  --show-bg-soft:  #1b1b29;   /* warna card body */
+  --show-border:   #2a2f45;   /* (tak dipakai lagi utk table) */
+  --show-text:     #e6ebff;
+  --show-muted:    #a9b0c6;
+}
+
+/* Card wrapper */
+.theme-show .card{
+  background-color: var(--show-bg-soft) !important;
+  border: 0 !important;                /* <= tanpa border */
+  box-shadow: none !important;
+}
+.theme-show .card-header{
+  background-color: var(--show-bg-soft) !important;
+  border: 0 !important;                /* <= tanpa border */
+  color: var(--show-text) !important;
+}
+.theme-show .card-body{
+  background-color: var(--show-bg-soft) !important;
+  color: var(--show-text) !important;
+}
+
+/* Headings & text */
+.theme-show .page-heading h3,
+.theme-show h2, .theme-show h5{ color: var(--show-text) !important; }
+.theme-show .text-muted,
+.theme-show .text-subtitle{ color: var(--show-muted) !important; }
+
+/* Hilangkan <hr> */
+.theme-show hr{ border:0 !important; height:0 !important; opacity:0 !important; }
+
+/* ===== TABLE: no border, no zebra, no hover ===== */
+.theme-show .table,
+.theme-show table{ background: transparent !important; color: var(--show-text) !important; }
+
+/* Pukul rata semua sel & header: tidak ada garis sama sekali */
+.theme-show .table > :not(caption) > * > *,
+.theme-show table > :not(caption) > * > *{
+  border: 0 !important;                /* <= inti: hapus border sel */
+  box-shadow: none !important;
+  background-color: var(--show-bg) !important;
+  color: var(--show-text) !important;
+}
+
+/* Matikan zebra bawaan bootstrap/tema lain */
+.theme-show .table tbody tr:nth-of-type(odd) > *,
+.theme-show .table tbody tr:nth-of-type(even) > *{
+  --bs-table-accent-bg: transparent !important;
+  background: var(--show-bg) !important;
+}
+
+/* Tidak ada highlight saat hover */
+.theme-show .table.table-hover > tbody > tr:hover > *,
+.theme-show .table tbody tr:hover > *{
+  background: var(--show-bg) !important;
+  color: inherit !important;
+  box-shadow: none !important;
+}
+
+/* Kolom judul kiri tetap tebal */
+.theme-show .table th{
+  font-weight: 600 !important;
+  width: 220px;
+}
+
+/* Badge/teks kecil */
+.theme-show .badge.bg-dark{ background-color:#2b3048 !important; color:#cfd6ff !important; }
+.theme-show .small, .theme-show small{ color: var(--show-muted) !important; }
+
+/* Link biasa (bukan tombol) tidak jadi pointer & tidak berubah warna */
+.theme-show .card a:not(.btn){
+  color: inherit !important;
+  text-decoration: none !important;
+  cursor: default !important;
+}
+.theme-show .card a:not(.btn):hover{
+  color: inherit !important;
+  text-decoration: none !important;
+  cursor: default !important;
+}
+
+/* List-group (kalau ada) juga tanpa garis */
+.theme-show .list-group-item{
+  background: var(--show-bg) !important;
+  border: 0 !important;
+  color: var(--show-text) !important;
+}
+.theme-show .list-group-item:hover{
+  background: var(--show-bg) !important;
+}
+
+/* =========================================================
+   DASHBOARD MARKETING – KPI + Jarakan Presisi
+   ========================================================= */
+
+/* Header ↔ KPI rapat tapi tetap lega */
+.header-tight {
+  margin-bottom: .25rem !important;
+}
+
+.kpi-row {
+  --bs-gutter-x: .25rem !important;
+  --bs-gutter-y: .25rem !important;
+  margin-bottom: .25rem !important;
+}
+
+.kpi-card {
+  border: none;
+  border-radius: 14px;
+  background: transparent;
+  transition: all 0.15s ease-in-out;
+  margin: 0 !important;
+}
+.kpi-card:hover {
+  transform: translateY(-2px);
+}
+
+/* Isi kartu (lebih kompak & proporsional tinggi-lebar) */
+.kpi-card .kpi-body {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 14px;
+  min-height: 100px;  /* lebih pas, tidak gepeng, tidak tinggi */
+}
+
+/* Icon wrapper */
+.kpi-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  flex-shrink: 0;
+  margin: 0;
+}
+
+/* Pastikan icon center sempurna */
+.kpi-icon i,
+.kpi-icon svg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+/* Warna icon */
+.kpi-icon.indigo { background: linear-gradient(180deg, #EEF0FF, #E1E5FF); color: #4453ff; }
+.kpi-icon.red    { background: linear-gradient(180deg, #FFE9E3, #FFD8CF); color: #ef4444; }
+.kpi-icon.cyan   { background: linear-gradient(180deg, #E6FCFF, #D6F6FA); color: #06b6d4; }
+
+/* Putih */
+.kpi-white .kpi-body {
+  background: #fff !important;
+  color: #111827 !important;
+}
+
+/* Proyek Berjalan */
+.kpi-proyek .kpi-body {
+  background: #5160e0 !important;
+  color: #fff !important;
+}
+.kpi-proyek .kpi-icon {
+  background: rgba(255,255,255,.18);
+  color: #fff;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.35);
+}
+/* Baris grafik lebih rapat */
+.charts-row {
+  --bs-gutter-x: .5rem;
+  --bs-gutter-y: .4rem;
+  margin-top: .5rem !important;
+}
+
+/* Card-body grafik lebih kompak */
+.card-tight .card-body {
+  padding: 12px 14px;
+}
+
+/* Legend titik kecil */
+.legend-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+}
+.section-gap {
+    margin-bottom: 0.75rem; /* jarak antar section (12px) */
+    margin-top: 0.75rem;
+}
+/* === MARKETING DASHBOARD — Single Source of Truth (Light & Dark) === */
+.dashM{
+  --dash-gap: .60rem;      /* ritme jarak; atur suka-suka (.50–.75rem) */
+  --kpi-h:    92px;        /* tinggi minimum kartu KPI */
+}
+
+/* Netralisir aturan global yang bikin jarak beda-beda */
+.dashM .card{ margin:0 !important; }
+    .dashM .row > [class*="col-"]{ padding: calc(var(--dash-gap)/2) !important; }
+
+/* Header -> KPI */
+.dashM .header-tight{ margin-bottom: .50rem !important; }
+
+/* Baris KPI (4 kartu atas) */
+.dashM .kpi-row{
+  --bs-gutter-x: var(--dash-gap);
+  --bs-gutter-y: var(--dash-gap);
+  margin: 0 0 var(--dash-gap) 0 !important;    /* hanya bottom */
+}
+.dashM .kpi-card .kpi-body{
+  display:flex; align-items:center; gap:12px;
+  min-height: var(--kpi-h);
+  padding:12px 16px;
+}
+
+/* Baris grafik & list kanan — JANGAN ada margin-top tambahan */
+.dashM .charts-row{
+  --bs-gutter-x: var(--dash-gap);
+  --bs-gutter-y: var(--dash-gap);
+  margin: 0 !important;                         /* no top/bottom */
+}
+/* Spasi antar baris: pakai hanya dari kpi-row (atas) */
+.dashM .kpi-row + .charts-row{ margin-top: 0 !important; }
+
+/* Body card grafik lebih kompak */
+.dashM .card-tight .card-body{ padding: 14px 16px; }
+
+/* List kanan lebih ringkas */
+.dashM #stepList .list-group-item{ padding-top:.5rem; padding-bottom:.5rem; }
+
+/* Warna KPI (tetap sama di light/dark) */
+.dashM .kpi-white{ background:#fff !important; border:1px solid #e5e7eb !important; }
+.dashM .kpi-proyek .kpi-body{
+  background:#5160e0 !important; color:#fff !important; border-radius:.75rem;
+}
+/* =========================================================
+   FIX SHOW PAGE (LIGHT) — Paksa terang saat tema light
+   ========================================================= */
+html[data-bs-theme="light"] body {
+  background-color: #f3f4f6 !important;
+  color: #111827 !important;
+}
+
+/* Card/section di halaman show jadi putih */
+html[data-bs-theme="light"] .theme-show .card,
+html[data-bs-theme="light"] .theme-show .card-header,
+html[data-bs-theme="light"] .theme-show .card-body {
+  background: #ffffff !important;
+  color: #111827 !important;
+  border-color: #e5e7eb !important;
+  box-shadow: 0 8px 24px rgba(16,24,40,.06) !important;
+}
+
+/* Tabel di dalam show */
+html[data-bs-theme="light"] .theme-show .table,
+html[data-bs-theme="light"] .theme-show .table > :not(caption) > * > * {
+  background: #ffffff !important;
+  color: #111827 !important;
+  border-color: #e5e7eb !important;
+}
+
+/* List-group, hr, dll. */
+html[data-bs-theme="light"] .theme-show .list-group-item {
+  background: #ffffff !important;
+  color: #111827 !important;
+  border-color: #e5e7eb !important;
+}
+html[data-bs-theme="light"] .theme-show hr {
+  border-top: 1px solid #e5e7eb !important;
+}
+
+/* Netralisir class gelap yang nyangkut di dalam .theme-show */
+html[data-bs-theme="light"] .theme-show .bg-dark,
+html[data-bs-theme="light"] .theme-show [class*="bg-dark"] {
+  background: #ffffff !important;
+  color: #111827 !important;
+}
+html[data-bs-theme="light"] .theme-show .text-white,
+html[data-bs-theme="light"] .theme-show [class*="text-light"] {
+  color: #111827 !important;
+}
+
+/* Badge/btn subtle biar tetap kebaca */
+html[data-bs-theme="light"] .theme-show .badge.bg-dark {
+  background: #e5e7eb !important;
+  color: #111827 !important;
+}
+/* ===== SHOW (Detail) — no borders, no hover, no pointer on plain text/links ===== */
+
+/* Matikan semua garis tabel di halaman show */
+.theme-show .table,
+.theme-show .card .table{
+  --bs-table-border-color: transparent !important;  /* netralisir bootstrap */
+  border-color: transparent !important;
+}
+.theme-show .table > :not(caption) > * > *{
+  border: 0 !important;               /* buang garis setiap sel */
+  box-shadow: none !important;
+}
+.theme-show .table thead th,
+.theme-show .table tbody td{
+  border: 0 !important;               /* pastikan header/body benar-benar tanpa border */
+}
+
+/* Matikan highlight saat hover baris */
+.theme-show .table.table-hover > tbody > tr:hover > *,
+.theme-show .table tbody tr:hover > *{
+  background: transparent !important;
+  color: inherit !important;
+  box-shadow: none !important;
+}
+
+/* Garis <hr> yang dipakai untuk pembatas juga disembunyikan */
+.theme-show hr{
+  border: 0 !important;
+  height: 0 !important;
+  opacity: 0 !important;
+  margin: .25rem 0 !important;        /* boleh kecil agar tidak “meloncat” layout */
+}
+
+/* Link biasa (bukan tombol) tidak berubah warna saat di-hover dan bukan pointer */
+.theme-show .card a:not(.btn){
+  color: inherit !important;
+  text-decoration: none !important;
+  cursor: default !important;
+}
+.theme-show .card a:not(.btn):hover{
+  color: inherit !important;
+  text-decoration: none !important;
+  cursor: default !important;
+}
+
+/* Kalau ada list-group di halaman show, buang garisnya juga */
+.theme-show .list-group-item{
+  border-color: transparent !important;
+}
+.theme-show .show-item,
+.theme-show .show-box{
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+/* ================== SHOW: matikan zebra & hover sepenuhnya ================== */
+/* Nonaktifkan zebra milik .table-striped (semua variasi) */
+.theme-show .table-striped > tbody > tr:nth-of-type(odd) > *,
+.theme-show .table-striped > tbody > tr:nth-of-type(even) > *,
+.theme-show table.table-striped > tbody > tr:nth-of-type(odd) > *,
+.theme-show table.table-striped > tbody > tr:nth-of-type(even) > *{
+  --bs-table-accent-bg: transparent !important;
+  background: var(--show-bg) !important; /* samakan dengan panel */
+}
+
+/* Nonaktifkan hover bawaan .table-hover (semua variasi) */
+.theme-show .table-hover > tbody > tr:hover > *,
+.theme-show table.table-hover > tbody > tr:hover > *,
+.theme-show .table > tbody > tr:hover > *,
+.theme-show table > tbody > tr:hover > *{
+  --bs-table-accent-bg: transparent !important;
+  background: var(--show-bg) !important;
+  color: inherit !important;
+  box-shadow: none !important;
+}
+
+/* Pastikan sel betul-betul tanpa border dan tidak berubah cursor */
+.theme-show .table > :not(caption) > * > *{
+  border: 0 !important;
+  box-shadow: none !important;
+  cursor: default !important;
+}
+
+/* Hilangkan garis pada <hr> di dalam card show */
+.theme-show hr{ border:0 !important; height:0 !important; opacity:0 !important; }
+/* ================== SHOW: samakan warna sel dengan pinggir card ================== */
+/* 1) Semua sel & header mewarisi warna card (tidak punya background sendiri) */
+.theme-show .card .table,
+.theme-show .card .table > :not(caption) > * > *{
+  background: transparent !important;   /* ambil warna dari .card/.card-body */
+  border: 0 !important;
+  box-shadow: none !important;
+  color: inherit !important;
+}
+
+/* 2) Matikan zebra sepenuhnya (jangan cat ulang sel) */
+.theme-show .table-striped > tbody > tr:nth-of-type(odd) > *,
+.theme-show .table-striped > tbody > tr:nth-of-type(even) > *,
+.theme-show table.table-striped > tbody > tr:nth-of-type(odd) > *,
+.theme-show table.table-striped > tbody > tr:nth-of-type(even) > *{
+  --bs-table-accent-bg: transparent !important;
+  background: transparent !important;
+}
+
+/* 3) Matikan hover highlight (tetap transparan) */
+.theme-show .table-hover > tbody > tr:hover > *,
+.theme-show table.table-hover > tbody > tr:hover > *,
+.theme-show .table > tbody > tr:hover > *,
+.theme-show table > tbody > tr:hover > *{
+  --bs-table-accent-bg: transparent !important;
+  background: transparent !important;
+  color: inherit !important;
+  box-shadow: none !important;
+  cursor: default !important;
+}
+
+/* 4) (Opsional) pastikan card-nya jadi “sumber warna” permukaan */
+.theme-show .card,
+.theme-show .card-header,
+.theme-show .card-body{
+  /* pakai 1 warna supaya rata; kalau sudah cocok, biarkan saja */
+  background-color: #1e1e2d !important;
+  border-color: #2b3050 !important;
+  color: #e6ebff !important;
+}
+
+/* 5) Garis <hr> di halaman show tetap hilang */
+.theme-show hr{ border:0 !important; height:0 !important; opacity:0 !important; }
+/* ========== SHOW: matikan SEMUA efek hover di tabel detail ========== */
+.theme-show table, 
+.theme-show table *{
+  transition: none !important; /* jangan ada animasi halus */
+}
+
+/* Bootstrap: table-hover & table biasa */
+.theme-show .table-hover > tbody > tr:hover,
+.theme-show .table-hover > tbody > tr:hover > *,
+.theme-show .table > tbody > tr:hover,
+.theme-show .table > tbody > tr:hover > *{
+  background: transparent !important;
+  --bs-table-accent-bg: transparent !important;
+  color: inherit !important;
+  box-shadow: none !important;
+  cursor: default !important;
+}
+
+/* DataTables: semua varian hover */
+.theme-show table.dataTable.hover tbody tr:hover,
+.theme-show table.dataTable.display tbody tr:hover,
+.theme-show table.dataTable tbody tr:hover,
+.theme-show table.dataTable tbody tr:hover > td,
+.theme-show table.dataTable tbody tr:hover > th{
+  background: transparent !important;
+  --bs-table-accent-bg: transparent !important;
+  color: inherit !important;
+  box-shadow: none !important;
+  cursor: default !important;
+}
+
+/* Link biasa di dalam card show: jangan berubah warna saat hover */
+.theme-show .card a:not(.btn),
+.theme-show .card a:not(.btn):hover,
+.theme-show .card a:not(.btn):focus{
+  color: inherit !important;
+  text-decoration: none !important;
+  background: transparent !important;
+  outline: none !important;
+}
+
+/* Tombol tetap pakai cursor pointer (tidak ikut dimatikan) */
+.theme-show .table .btn,
+.theme-show .table a.btn{ 
+  cursor: pointer !important; 
+}
+/* === SHOW HEADER: paksa hitam (tema light) === */
+html[data-bs-theme="light"] .theme-show .page-heading h1,
+html[data-bs-theme="light"] .theme-show .page-heading h2,
+html[data-bs-theme="light"] .theme-show .page-heading h3,
+html[data-bs-theme="light"] .theme-show .page-heading .text-subtitle,
+html[data-bs-theme="light"] .theme-show .page-heading small,
+html[data-bs-theme="light"] .theme-show .page-heading p {
+  color: #111827 !important;   /* hitam/abu sangat gelap */
+  opacity: 1 !important;       /* hilangkan efek pudar */
+  text-shadow: none !important; /* pastikan tidak glow */
+  filter: none !important;
+}
+
+/* (opsional) jika halaman show belum pakai .theme-show */
+html[data-bs-theme="light"] .page-heading h3 {
+  color: #111827 !important;
+  opacity: 1 !important;
+}
+/* === SHOW PAGE (tema LIGHT): paksa heading jadi hitam === */
+html[data-bs-theme="light"] .theme-show h1,
+html[data-bs-theme="light"] .theme-show h2,
+html[data-bs-theme="light"] .theme-show h3,
+html[data-bs-theme="light"] .theme-show h4,
+html[data-bs-theme="light"] .theme-show h5,
+html[data-bs-theme="light"] .theme-show h6,
+html[data-bs-theme="light"] .theme-show .card .card-title,
+html[data-bs-theme="light"] .theme-show .card-header,
+html[data-bs-theme="light"] .theme-show .card-header .card-title,
+html[data-bs-theme="light"] .theme-show .section-title,
+html[data-bs-theme="light"] .theme-show .section-title h5 {
+  color: #111827 !important;   /* hitam/abu sangat gelap */
+  opacity: 1 !important;
+  text-shadow: none !important;
+  filter: none !important;
+}
+
+/* Kalau heading kamu diberi .text-primary oleh blade/theme, netralisir di halaman show saja */
+html[data-bs-theme="light"] .theme-show .card .text-primary,
+html[data-bs-theme="light"] .theme-show .section-title.text-primary {
+  color: #111827 !important;
+}
+.kpi-card .kpi-icon { color: inherit; }
+.kpi-icon.cyan   { background:#06b6d41a; color:#06b6d4; }
+.kpi-icon.red    { background:#ef44441a; color:#ef4444; }
+.kpi-icon.indigo { background:#6366f11a; color:#6366f1; }
+.kpi-icon.purple { background:#a855f71a; color:#a855f7; }
+.kpi-icon.orange { background:#f59e0b1a; color:#f59e0b; }
+
+/* ==== Sidebar gap fix: rapatkan & matikan 'pill' abu-abu ==== */
+
+/* 1) Link induk jangan bikin celah */
+#sidebar .sidebar-menu .sidebar-item.has-sub > a.sidebar-link{
+  margin-bottom: 0 !important;
+  padding-bottom: .45rem !important;
+}
+
+/* 2) Submenu menempel, transparan, dan tak punya dekorasi */
+#sidebar .sidebar-menu .sidebar-item.has-sub > .submenu{
+  margin: 0 !important;
+  padding: .25rem 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  overflow: hidden !important;
+  position: relative !important;
+  top: 0 !important;
+}
+
+/* 3) Matikan pseudo-element yang sering jadi 'pills' dekoratif */
+#sidebar .sidebar-menu .sidebar-item.has-sub > .submenu::before,
+#sidebar .sidebar-menu .sidebar-item.has-sub > .submenu::after{
+  content: none !important;
+  display: none !important;
+}
+
+/* 4) Saat item induk TIDAK aktif, benar-benar sembunyikan submenu */
+#sidebar .sidebar-menu .sidebar-item:not(.active) > .submenu{
+  display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+}
+
+/* 5) Rapatkan jarak antar item induk */
+#sidebar .sidebar-menu .sidebar-item{
+  margin-bottom: .2rem !important;
+}
+#sidebar .sidebar-menu .sidebar-item + .sidebar-item{
+  margin-top: .2rem !important;
+}
+
+/* 6) Pastikan kontainer tidak menimbulkan overflow aneh */
+#sidebar, #sidebar .sidebar-wrapper{
+  overflow-x: hidden !important;
+}
+.klist.is-collapsed{max-height:168px} /* 5 item */
+.klist.is-expanded{max-height:320px}  /* 10 item */
+
+/* ==== FIX: submenu terakhir tidak ketutup ==== */
+
+/* pastikan container tidak memotong stack */
+.sidebar-wrapper .menu{
+  overflow: visible;
+}
+
+/* beri jarak & taruh submenu di atas elemen lain */
+.sidebar-wrapper .menu .submenu{
+  margin-bottom: .9rem;         /* jarak sebelum section/menu berikutnya */
+  padding-bottom: .25rem;
+  position: relative;
+  z-index: 2;
+}
+
+/* turunkan dan taruh title di layer bawah */
+.sidebar-wrapper .menu .sidebar-title{
+  margin-top: 1rem;
+  position: relative;
+  z-index: 1;
+}
+
+/* hilangkan garis dekoratif bawaan yang menimpa submenu */
+.sidebar-wrapper .menu .sidebar-title::before{
+  content: none !important;
+}
+
+/* --- Jika kamu ingin tetap pakai garis, ganti blok di atas
+   dengan versi reposisi ini (hapus "content:none" di atas) --- */
+/*
+.sidebar-wrapper .menu .sidebar-title::before{
+  transform: none !important;
+  position: absolute;
+  left: 1rem;
+  right: 1rem;
+  height: 2px;
+  bottom: -10px !important;   // jauh di bawah title
+  background: rgba(255,255,255,.12);
+  z-index: 0 !important;      // tidak menutupi submenu
+}
+*/
+
+/* =========================================================================
+   DARK MODE ADJUST
+   ========================================================================= */
+html[data-bs-theme="dark"] .card{ background:#11131a; border:1px solid #222637; box-shadow:none; }
+html[data-bs-theme="dark"] .card-header{ background:#11131a; border-color:#222637; }
+html[data-bs-theme="dark"] .table thead th{ background:#11131a; }
+html[data-bs-theme="dark"] .table tbody tr:nth-child(even){ background:#0f1220; }
+html[data-bs-theme="dark"] .table .col-actions{ background:#11131a; }
+html[data-bs-theme="dark"] .btn-ghost{ border-color:rgba(255,255,255,.08); }
+
+/* Konsistensi tombol primary */
+.btn-primary{ background:var(--tbid-primary); border-color:var(--tbid-primary); }
+a{ color:var(--tbid-primary); }
